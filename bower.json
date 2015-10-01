@@ -1,0 +1,12 @@
+{
+  "name": "pretender",
+  "version": "0.0.1",
+  "homepage": "https://github.com/nameitlater/pretender",
+  "authors": [
+    "Name It Later authors"
+  ],
+  "private": true,
+  "dependencies": {
+    "pretender": "~0.10.0"
+  }
+}
