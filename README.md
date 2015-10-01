@@ -34,7 +34,7 @@ In your entrypoint Dart:
 
    ```
 
- ### Usage with Web Components:
+### Usage with Web Components:
 
 In your entrypoint HTML:
  ```
