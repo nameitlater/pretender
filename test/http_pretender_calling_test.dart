@@ -5,7 +5,7 @@ library pretender.test.http_pretender_calling_test;
 
 import 'package:pretender/http_pretender.dart';
 import 'package:test/test.dart';
-import 'util.dart';
+import 'package:pretender/util.dart';
 
 void main() {
 
