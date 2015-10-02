@@ -51,8 +51,7 @@ In your entrypoint HTML:
  ```
 
 ## Limitations
-This package will not proxy for BrowserClient or HttpRequest in Dartium. The Dart definition
-of the DOM API's is separate from JavaScript definition. See issue [24462](https://github.com/dart-lang/sdk/issues/24462).
+This package currently breaks BrowserClient and HttpRequest both in Dartium and Javascript. See issue [24462](https://github.com/dart-lang/sdk/issues/24462). It's primarily useful for testing applications/web components built using [Polymer Elements](https://github.com/dart-lang/polymer_elements).
 
 Please file feature requests and bugs at the [issue tracker][tracker].
 
