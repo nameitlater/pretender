@@ -4,6 +4,9 @@ Pretender is a Dart wrapper for [Pretender](https://github.com/pretenderjs/prete
 a mock server library written in JavaScript.   It currently only supports a small
 subset of the Pretender api (get, post, and map).
 
+## Limitations
+This package currently breaks BrowserClient and HttpRequest. See issue [24462](https://github.com/dart-lang/sdk/issues/24462). It's primarily useful for testing applications/web components built using [Polymer Elements](https://github.com/dart-lang/polymer_elements).
+
 ## Usage
 
 ### Usage in Basic HTML/Dart:
@@ -49,10 +52,7 @@ In your entrypoint HTML:
    var pretender = new HttpPretender();
  }
  ```
-
-## Limitations
-This package currently breaks BrowserClient and HttpRequest. See issue [24462](https://github.com/dart-lang/sdk/issues/24462). It's primarily useful for testing applications/web components built using [Polymer Elements](https://github.com/dart-lang/polymer_elements).
-
+## Features/Issues
 Please file feature requests and bugs at the [issue tracker][tracker].
 
 [tracker]: https://github.com/nameitlater/pretender
