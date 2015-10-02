@@ -5,7 +5,7 @@ author: Erik Grimes <erik.grimes@gmail.com>
 homepage: https://github.com/nameitlater/pretender
 
 environment:
-  sdk: '>=1.0.0 <2.0.0'
+    sdk: ">=1.8.0 <2.0.0"
 
 dependencies:
   web_components: ^0.12.0
