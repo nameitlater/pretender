@@ -1,6 +1,6 @@
 name: pretender
 description: A Dart wrapper for the JavaScript pretender library.
-version: 0.0.1
+version: 0.1.0
 author: Erik Grimes <erik.grimes@gmail.com>
 homepage: https://github.com/nameitlater/pretender
 
