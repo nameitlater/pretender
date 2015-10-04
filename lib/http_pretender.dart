@@ -6,6 +6,7 @@ library pretender.http_pretender;
 
 import 'dart:js';
 
+//TODO Should this be replaced with FakeXMLHttpRequest?
 class Request {
   final String url;
   final String method;
@@ -22,6 +23,7 @@ class Request {
 
 }
 
+
 class Response {
 
   final int status;
@@ -36,33 +38,84 @@ typedef Response RequestHandler(Request req);
 
 typedef void RouteMapper(HttpPretender pretender);
 
+typedef RequestErrorHandler (Request request, error);
+
+typedef RequestHandledListener(Request, Response);
+
 class HttpPretender {
 
   JsObject _pretender;
 
-  HttpPretender(): _pretender = new JsObject(context['Pretender'],[]);
+  HttpPretender([List<RouteMapper> maps= const []]): _pretender = new JsObject(context['Pretender']) {
+    for(var m in maps){
+      map(m);
+    }
+  }
+
+  final Expando<int> handlerRequestCount = new Expando<int>();
+
+  List<Request> get handledRequests {
+    var dartRequests = [];
+    for(var jsr in _pretender['handledRequests']){
+      dartRequests.add(_jsRequestToDartRequest(jsr));
+    }
+    return dartRequests;
+  }
+
+  set erroredRequest (RequestErrorHandler handler){
+    _pretender['erroredRequest'] = (method,route,request,error){
+      handler(_jsRequestToDartRequest(request), error);
+    };
+  }
+
+  set handledRequest (RequestHandledListener handler){
+    _pretender['handledRequest'] = (verb, path, request){
+      handler(_jsRequestToDartRequest(request), _jsRequestToDartResponse(request));
+    };
+  }
 
   void map(RouteMapper mapper){
     mapper(this);
   }
 
-  void get(String route, RequestHandler handler){
-       _pretender.callMethod('get', [route,(jsr){
-         return _dartResponseToJs(handler(_jsRequestToDart(jsr)));
-       }]);
+  void delete(String route, RequestHandler handler, {timing}){
+    _register('delete', route, handler, timing);
   }
 
-  void post(String route, RequestHandler handler){
-    _pretender.callMethod('post', [route,(jsr){
-      return _dartResponseToJs(handler(_jsRequestToDart(jsr)));
-    }]);
+  void get(String route, RequestHandler handler, {dynamic timing}){
+    _register('get', route, handler, timing);
+  }
+
+  void head(String route, RequestHandler handler, {dynamic timing}){
+    _register('head', route, handler, timing);
+  }
+
+  void patch(String route, RequestHandler handler, {dynamic timing}){
+    _register('patch', route, handler,  timing);
+  }
+
+  void post(String route, RequestHandler handler, {dynamic timing}){
+    _register('post', route, handler, timing);
   }
 
   shutdown(){
     _pretender.callMethod('shutdown',[]);
   }
 
+  _register(String method, String route, RequestHandler handler,  dynamic timing){
+    if(handler != null) {
+      this.handlerRequestCount[handler] = 0;
+      _pretender.callMethod(method, [route, (jsr) {
+        handlerRequestCount[handler] = handlerRequestCount[handler]+ 1;
+        return _dartResponseToJs(handler(_jsRequestToDartRequest(jsr)));
+      }, timing]);
+    }else {
+      _pretender.callMethod(method, [route]);
+    }
+  }
+
 }
+
 
 
 _dartResponseToJs(Response dr){
@@ -74,14 +127,17 @@ _dartResponseToJs(Response dr){
   }
 }
 
-_jsRequestToDart(JsObject jsr){
-  var r = new Request(jsr['method'], jsr['url'],
+_jsRequestToDartRequest(JsObject jsr){
+  return new Request(jsr['method'], jsr['url'],
       requestHeaders:_jsObjectToDartMap(jsr['requestHeaders']),
       params: _jsObjectToDartMap(jsr['params']),
       queryParams: _jsObjectToDartMap(jsr['queryParams']),
       requestBody: jsr['requestBody']);
-  return r;
 }
+
+    _jsRequestToDartResponse(JsObject jsr){
+      return new Response(jsr['status'], _jsObjectToDartMap(jsr['responseHeaders']), jsr['responseText']);
+    }
 
 _dartHeadersToJsHeaders(Map<String, String> headers){
   return new JsObject.jsify(headers);
@@ -98,3 +154,4 @@ _jsObjectToDartMap(JsObject o){
   });
   return map;
 }
+

@@ -1,11 +1,18 @@
 # pretender
 
 Pretender is a Dart wrapper for [Pretender](https://github.com/pretenderjs/pretender),
-a mock server library written in JavaScript.   It currently only supports a small
-subset of the Pretender api (get, post, and map).
+a mock server library written in JavaScript.  It currently supports only a small subset of the
+Pretender api (get, post, and map).
 
 ## Limitations
-This package currently breaks BrowserClient and HttpRequest. See issue [24462](https://github.com/dart-lang/sdk/issues/24462). It's primarily useful for testing applications/web components built using [Polymer Elements](https://github.com/dart-lang/polymer_elements).
+Pretender works by replacing XMLHttpRequest in the browser DOM with its own mock implementation,
+FakeXMLHttpRequest.  This doesn't interoperate well with the Dart apis.  Calls made to
+Dart apis in Dartium don't see Pretenders version of the XMLHttpRequest.  Calls made to Dart apis
+when compiled to JavaScript may throw unexpected exceptions. See issue [24462](https://github.com/dart-lang/sdk/issues/24462).
+
+With these limitations, the library is primarily useful for testing web components
+built using [Polymer Elements](https://github.com/dart-lang/polymer_elements) that rely on the
+the JavaScript API's directly.
 
 ## Usage
 

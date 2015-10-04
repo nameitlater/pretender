@@ -110,9 +110,38 @@ void main() {
 
   await ajax('/some/path');
 
-  //var req = pretender.handledRequests[0];
+  var req = pretender.handledRequests[0];
   expect(req.url, equals('/some/path'));
-  }, skip: 'Pending implementation');
+  });
+
+  test('increments the handler\'s request count', () async {
+  var handler = (req) {};
+
+  pretender.get('/some/path', handler);
+
+  await ajax('/some/path');
+
+  expect(pretender.handlerRequestCount[handler], equals(1));
+  });
+
+  test('handledRequest is called',() async
+  {
+
+    var json = '{foo: "bar"}';
+    pretender.get('/some/path', (req) {
+    return new Response(200, {}, json);
+    });
+
+    pretender.handledRequest = (Request request, Response response) {
+      expect(request.method, equals('GET'));
+      expect(request.url, equals('/some/path'));
+      expect(response.responseText, equals(json));
+      expect(response.status, equals('200'));
+    };
+
+    await ajax( '/some/path');
+
+  });
 
 }
 
