@@ -5,6 +5,7 @@
 library pretender.http_pretender;
 
 import 'dart:js';
+import 'dart:convert';
 
 //TODO Should this be replaced with FakeXMLHttpRequest?
 class Request {
@@ -110,7 +111,6 @@ class HttpPretender {
           handlerRequestCount[handler] = handlerRequestCount[handler] + 1;
           return _dartResponseToJs(handler(_jsRequestToDartRequest(jsr)));
         },
-        timing
       ]);
     } else {
       _pretender.callMethod(method, [route]);
@@ -127,11 +127,19 @@ _dartResponseToJs(Response dr) {
 }
 
 _jsRequestToDartRequest(JsObject jsr) {
+  var requestBody;
+  if(jsr['requestBody'] is String){
+    requestBody = jsr['requestBody'];
+  }
+  else {
+    requestBody = JSON.encode(_jsObjectToDartMap(jsr['requestBody']));
+  }
+
   return new Request(jsr['method'], jsr['url'],
       requestHeaders: _jsObjectToDartMap(jsr['requestHeaders']),
       params: _jsObjectToDartMap(jsr['params']),
       queryParams: _jsObjectToDartMap(jsr['queryParams']),
-      requestBody: jsr['requestBody']);
+      requestBody: requestBody);
 }
 
 _jsRequestToDartResponse(JsObject jsr) {

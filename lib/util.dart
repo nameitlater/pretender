@@ -46,7 +46,7 @@ Future<JsObject> ajax(String url,
       client.callMethod('send', []);
       break;
     default:
-      throw ArgumentError('Unknown method ${method}');
+      throw new ArgumentError('Unknown method ${method}');
   }
 
   await completer.future;
