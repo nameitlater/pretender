@@ -1,3 +1,5 @@
+@JS()
+library pretender;
 
 import 'package:js/js.dart';
 import "package:func/func.dart";
@@ -5,7 +7,6 @@ import "package:func/func.dart";
 @JS()
 @anonymous
 class Request {
-
   external String get url;
   external String get method;
   external Map<String, String> get requestHeaders;
@@ -19,8 +20,9 @@ typedef void RouteMapper(Pretender pretender);
 
 @JS('Pretender')
 class Pretender {
-  external factory Pretender();
+  external factory Pretender([List<RouteMapper> maps]);
   external map(VoidFunc1<Pretender> mapper);
   external get(String path, Func1<Request, List> handler);
   external post(String path, Func1<Request, List> handler);
+  external shutdown();
 }

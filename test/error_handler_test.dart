@@ -1,21 +1,21 @@
 // Port of pretender error_test.js
 
 
-library pretender.test.http_pretender_error_test;
+library pretender.test.pretender_error_test;
 
-import 'package:pretender/http_pretender.dart';
+import 'package:pretender/pretender.dart';
 import 'package:test/test.dart';
 import 'package:pretender/util.dart';
 
 void main() {
 
 
-  HttpPretender pretender;
+  Pretender pretender;
   group('pretender errored requests', ()
   {
 
     setUp((){
-      pretender = new HttpPretender();
+      pretender = new Pretender();
     });
 
     tearDown(() {

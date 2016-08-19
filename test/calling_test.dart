@@ -1,18 +1,18 @@
 // Port of pretender calling_test.js
 
 
-library pretender.test.http_pretender_calling_test;
+library pretender.test.pretender_calling_test;
 
-import 'package:pretender/http_pretender.dart';
+import 'package:pretender/pretender.dart';
 import 'package:test/test.dart';
 import 'package:pretender/util.dart';
 
 void main() {
 
-  HttpPretender pretender;
+  Pretender pretender;
 
   setUp((){
-    pretender = new HttpPretender();
+    pretender = new Pretender();
   });
 
   tearDown((){
